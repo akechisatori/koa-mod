@@ -1,22 +1,26 @@
 const route = require('koa-route');
 const fs = require('fs');
+const path = require('path');
 
 module.exports = {
-    bind: (root, path) => {
+    bind: (root, req_path) => {
         return new Promise((resolve, reject) => {
-            let splited_path = path.split('/');
-            let folder = splited_path.slice(0, splited_path.length - 1).join('/');
-            let action = splited_path.slice(-2);
-            let controller = root + folder + ".js";
+            let parsed = path.parse(req_path);
+            if (parsed.dir === '/') {
+                return reject({
+                    status: 404,
+                    message: `Controller Not Found`
+                });
+            }
+            let controller = root + parsed.dir + ".js";
             try {
                 if (fs.statSync(controller).isFile()) {
                     resolve({
                         controller: require(controller),
-                        method: action.pop()
+                        method: parsed.base
                     });
                 }
             } catch (error) {
-                console.log(`stat ${controller} not exist`);
                 reject({
                     status: 404,
                     message: `Controller Not Found`
