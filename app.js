@@ -14,18 +14,18 @@ app.use((ctx, next) => {
     });
 });
 
-app.use(ctx => new Promise(resolve => {
+app.use((ctx, next) => new Promise(resolve => {
     router.bind(__dirname + config.root, ctx.request.path).then(invoke => {
         var controller = invoke['controller'];
         var method = invoke['method'];
-        var params = [ctx, ctx.query];
+        var params = [ctx, ctx.query, next];
 
         if (!Reflect.has(controller,method)) {
             ctx.body = {
                 staus: 404,
                 message: "Method Not Found"
             };
-            return;
+            return resolve();
         }
         var reflect = Reflect.apply(controller[method], undefined, params).then(res => {
             ctx.body = res;
