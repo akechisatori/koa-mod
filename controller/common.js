@@ -1,4 +1,4 @@
-const axios = require('axios')
+const axios = require('axios');
 
 module.exports = {
     ip: (ctx, query, next) => {
@@ -15,5 +15,12 @@ module.exports = {
                 reject(err);
             });
         });
+    },
+    timeout: (ctx, query, next) => {
+        return new Promise((resolve, reject) => {
+            //it will trigger 503 error
+            setTimeout(() => {
+            }, 6000);
+        })
     }
 }
