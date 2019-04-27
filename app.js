@@ -1,7 +1,6 @@
 const Koa = require('koa');
 const config = require('./config');
 const router = require('./router');
-const fs = require('fs');
 const watchdog = require('promise-timeout');
 const onerror = require('koa-onerror');
 
