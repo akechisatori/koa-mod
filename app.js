@@ -21,7 +21,7 @@ app.use(ctx => new Promise(resolve => {
         var params = [ctx, ctx.query];
 
         if (!Reflect.has(controller,method)) {
-            ctx.response.body = {
+            ctx.body = {
                 staus: 404,
                 message: "Method Not Found"
             };
