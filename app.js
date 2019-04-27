@@ -47,7 +47,7 @@ app.use(ctx => new Promise(resolve => {
             resolve();
         });
     }).catch(err => {
-        ctx.response.body = err;
+        ctx.body = err;
         resolve();
     })
 }));
