@@ -22,13 +22,13 @@ app.use((ctx, next) => new Promise(resolve => {
         var this_params = {
             ctx: ctx,
             next: next
-        };
+        }
 
         if (!Reflect.has(controller,method)) {
             throw {
                 staus: 404,
                 message: 'Method Not Found'
-            };
+            }
         }
         if (config.auto_params) {
             var _method_params = router.getParams(controller[method]);
@@ -63,7 +63,7 @@ app.use((ctx, next) => new Promise(resolve => {
                 status: 500,
                 message: err.message,
                 stack: err.stack
-            };
+            }
         }).finally(() => {
             resolve();
         });

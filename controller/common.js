@@ -8,17 +8,17 @@ module.exports = {
                 str,
                 id
             });
-        })
+        });
     },
-    ip: function(ip) {
+    ip: function(ip = '') {
         return new Promise((resolve, reject) => {
-            axios.get('https://api.ip.sb/geoip' + (ip !== null ? ('/' + ip) : '')).then(res => {
+            axios.get('https://api.ip.sb/geoip/' + ip).then(res => {
                 resolve(res.data);
                 this.next().then(() => {
                     setTimeout(() => {
                         console.log("next() method test");
                     }, 2000);
-                })
+                });
             }).catch(err => {
                 reject(err);
             });
@@ -30,6 +30,6 @@ module.exports = {
             setTimeout(() => {
                 // resolve();
             }, 6000);
-        })
+        });
     }
 }
