@@ -18,16 +18,45 @@ app.use((ctx, next) => new Promise(resolve => {
     router.bind(__dirname + config.root, ctx.request.path).then(invoke => {
         var controller = invoke['controller'];
         var method = invoke['method'];
-        var params = [ctx, ctx.query, next];
+        var method_params = [];
+        var this_params = {
+            ctx: ctx,
+            next: next
+        };
 
         if (!Reflect.has(controller,method)) {
-            ctx.body = {
+            throw {
                 staus: 404,
-                message: "Method Not Found"
+                message: 'Method Not Found'
             };
-            return resolve();
         }
-        var reflect = Reflect.apply(controller[method], undefined, params).then(res => {
+        if (config.auto_params) {
+            var _method_params = router.getParams(controller[method]);
+            var method_keys = Object.keys(_method_params);
+            var request_keys = Object.keys(ctx.query);
+
+            method_keys.forEach((value, index) => {
+                if (request_keys.indexOf(value) >= 0) {
+                    method_params.push(ctx.query[value]);
+                } else {
+                    if (_method_params[value] !== null) {
+                        method_params.push(_method_params[value]);
+                    } else {
+                        if (config.strict_function_params) {
+                            throw {
+                                staus: 403,
+                                message: `Params '${value}' Required`
+                            };
+                        } else {
+                            method_params.push(null);
+                        }
+                    }
+                }
+            });
+        }
+        
+
+        var reflect = Reflect.apply(controller[method], this_params, method_params).then(res => {
             ctx.body = res;
         }).catch(err => {
             ctx.body = {
@@ -49,7 +78,7 @@ app.use((ctx, next) => new Promise(resolve => {
     }).catch(err => {
         ctx.body = err;
         resolve();
-    })
+    });
 }));
 onerror(app);
 

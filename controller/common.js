@@ -1,14 +1,22 @@
 const axios = require('axios');
 
 module.exports = {
-    ip: (ctx, query, next) => {
+    test: function(neko,str = 'owo', id) {
         return new Promise((resolve, reject) => {
-            let ip = query.ip;
-            axios.get('https://api.ip.sb/geoip' + (ip ? '/' + ip : '')).then(res => {
+            resolve({
+                neko,
+                str,
+                id
+            });
+        })
+    },
+    ip: function(ip) {
+        return new Promise((resolve, reject) => {
+            axios.get('https://api.ip.sb/geoip' + (ip !== null ? ('/' + ip) : '')).then(res => {
                 resolve(res.data);
-                next().then(() => {
+                this.next().then(() => {
                     setTimeout(() => {
-                        console.log("next() method test")
+                        console.log("next() method test");
                     }, 2000);
                 })
             }).catch(err => {
@@ -16,10 +24,11 @@ module.exports = {
             });
         });
     },
-    timeout: (ctx, query, next) => {
+    timeout: function() {
         return new Promise((resolve, reject) => {
             //it will trigger 503 error
             setTimeout(() => {
+                // resolve();
             }, 6000);
         })
     }
