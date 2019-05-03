@@ -3,8 +3,10 @@ const config = require('./config');
 const router = require('./router');
 const watchdog = require('promise-timeout');
 const onerror = require('koa-onerror');
+const loader = require('./loader');
 
 const app = new Koa();
+const loaded_extension = loader.load();
 
 app.use((ctx, next) => {
     const start = new Date();
@@ -21,7 +23,8 @@ app.use((ctx, next) => new Promise(resolve => {
         var method_params = [];
         var this_params = {
             ctx: ctx,
-            next: next
+            next: next,
+            ext: loaded_extension
         }
 
         if (!Reflect.has(controller,method)) {

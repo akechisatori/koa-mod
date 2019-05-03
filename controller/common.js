@@ -1,13 +1,13 @@
 const axios = require('axios');
 
 module.exports = {
-    test: function(neko,str = 'owo', id) {
+    test: function(word, from = 'cn', to = 'jp') {
         return new Promise((resolve, reject) => {
-            resolve({
-                neko,
-                str,
-                id
-            });
+            this.ext.hujiang.search(word, from, to).then(res => {
+                resolve(res);
+            }).catch(err => {
+                reject(err);
+            })
         });
     },
     ip: function(ip = '') {
