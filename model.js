@@ -6,15 +6,7 @@ const Model = {
         name: Sequelize.STRING,
         age: Sequelize.INTEGER,
         weight: Sequelize.STRING,
-        job: Sequelize.STRING,
-        createdAt: {
-            type: Sequelize.DATE,
-            defaultValue: Sequelize.NOW
-        },
-        updatedAt: {
-            type: Sequelize.DATE,
-            defaultValue: Sequelize.NOW
-        }
+        job: Sequelize.STRING
     }, {
         freezeTableName: true
     })
