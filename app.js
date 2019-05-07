@@ -4,6 +4,8 @@ const router = require('./router');
 const watchdog = require('promise-timeout');
 const onerror = require('koa-onerror');
 const loader = require('./loader');
+const sequelize = require('./sequelize');
+const model = require('./model');
 
 const app = new Koa();
 const loaded_extension = loader.load();
@@ -21,10 +23,13 @@ app.use((ctx, next) => new Promise(resolve => {
         var controller = invoke['controller'];
         var method = invoke['method'];
         var method_params = [];
+
         var this_params = {
             ctx: ctx,
             next: next,
-            ext: loaded_extension
+            ext: loaded_extension,
+            db: model,
+            mysql: sequelize
         }
 
         if (!Reflect.has(controller,method)) {

@@ -1,6 +1,26 @@
 const axios = require('axios');
 
 module.exports = {
+    query: function() {
+        return new Promise((resolve, reject) => {
+            this.db.user.findAll({
+                where: {
+                  id: 1
+                }
+              }).then(res => {
+                  resolve(res);
+              });
+        });
+    },
+    db: function(name = 'Yajuu Senpai', age = 24, job = 'がくせい', weight = '74kg') {
+        return new Promise((resolve, reject) => {
+            this.db.user.create({
+                name, age, job, weight
+            }).then(res => {
+                resolve(res);
+            })
+        })
+    },
     test: function(word, from = 'cn', to = 'jp') {
         return new Promise((resolve, reject) => {
             this.ext.hujiang.search(word, from, to).then(res => {
