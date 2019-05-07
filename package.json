@@ -18,7 +18,8 @@
     },
     "dependencies": {
         "axios": "^0.18.0",
-        "koa": "2.0.0",
+        "fresh": ">=0.5.2",
+        "koa": "^2.7.0",
         "koa-onerror": "^4.1.0",
         "koa-route": "^3.2.0",
         "mariadb": "^2.0.3",
