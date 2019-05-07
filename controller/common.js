@@ -1,14 +1,16 @@
 const axios = require('axios');
 
 module.exports = {
-    query: function() {
+    query: function(id = 1) {
         return new Promise((resolve, reject) => {
             this.db.user.findAll({
                 where: {
-                  id: 1
+                  id
                 }
               }).then(res => {
                   resolve(res);
+              }).catch(err => {
+                  reject(err);
               });
         });
     },
