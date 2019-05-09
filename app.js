@@ -4,8 +4,8 @@ const router = require('./router');
 const watchdog = require('promise-timeout');
 const onerror = require('koa-onerror');
 const loader = require('./loader');
-const sequelize = require('./sequelize');
-const model = require('./model');
+const sequelize = require('./database/core/sequelize');
+const model = require('./database/loader');
 
 const app = new Koa();
 const loaded_extension = loader.load();
