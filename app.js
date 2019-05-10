@@ -64,17 +64,33 @@ app.use((ctx, next) => new Promise(resolve => {
         }
         
 
-        var reflect = Reflect.apply(controller[method], this_params, method_params).then(res => {
-            ctx.body = res;
-        }).catch(err => {
+        try {
+            var reflect = Reflect.apply(controller[method], this_params, method_params);
+            if (typeof reflect !== 'object') {
+                ctx.body = {
+                    status: 500,
+                    message: 'Reflect Returns a non-Promise object'
+                }
+                return resolve();
+            }
+            reflect = reflect.then(res => {
+                ctx.body = res;
+            }).catch(err => {
+                ctx.body = {
+                    status: 500,
+                    message: err.message,
+                    stack: err.stack
+                }
+            }).finally(() => {
+                resolve();
+            });
+        } catch (error) {
             ctx.body = {
                 status: 500,
                 message: err.message,
                 stack: err.stack
             }
-        }).finally(() => {
-            resolve();
-        });
+        }
         watchdog.timeout(reflect, config.max_runtime).then(() => {
             
         }).catch(err => {
