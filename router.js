@@ -47,9 +47,16 @@ module.exports = {
                     });
                 }
             } catch (error) {
+                if (error.code === 'ENOENT') {
+                    return reject({
+                        status: 404,
+                        message: `Controller Not Found`
+                    });
+                }
                 reject({
-                    status: 404,
-                    message: `Controller Not Found`
+                    status: 500,
+                    message: error.message,
+                    stack: error.stack
                 });
             }
         })
