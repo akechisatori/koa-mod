@@ -79,7 +79,8 @@ app.use((ctx, next) => new Promise(resolve => {
             
         }).catch(err => {
             ctx.body = {
-                status: 503
+                status: 504,
+                message: 'Controller Process Timeout'
             }
             resolve();
         });
