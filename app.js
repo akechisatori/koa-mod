@@ -6,10 +6,14 @@ const onerror = require('koa-onerror');
 const loader = require('./loader');
 const sequelize = require('./database/core/sequelize');
 const model = require('./database/loader');
+const bodyParser = require('koa-bodyparser');
+const dotenv = require('dotenv');
 
 const app = new Koa();
 const loaded_extension = loader.load();
 
+dotenv.config();
+app.use(bodyParser());
 app.use((ctx, next) => {
     const start = new Date();
     return next().then(function() {
@@ -31,6 +35,8 @@ app.use((ctx, next) => new Promise(resolve => {
             db: model,
             mysql: sequelize
         }
+
+        ctx.query = Object.assign(ctx.query, ctx.request.body);
 
         if (!Reflect.has(controller,method)) {
             throw {
