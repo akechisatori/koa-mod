@@ -21,7 +21,7 @@ module.exports = {
 
         params.forEach((value, index) => {
             var values = (value[1] !== undefined) ? value[1].replace(new RegExp(/\"|\'/g), "") : null;
-            
+
             result[value[0]] = values;
             if (value[1] === 'null') {
                 result[value[0]] = null;
@@ -35,7 +35,8 @@ module.exports = {
             if (parsed.dir === '/') {
                 return reject({
                     status: 404,
-                    message: `Controller Not Found`
+                    message: `Controller Not Found`,
+                    path: req_path
                 });
             }
             let controller = root + parsed.dir + ".js";
@@ -50,10 +51,11 @@ module.exports = {
                 if (error.code === 'ENOENT') {
                     return reject({
                         status: 404,
-                        message: `Controller Not Found`
+                        message: `Controller Not Found`,
+                        path: req_path
                     });
                 }
-                reject({
+                return reject({
                     status: 500,
                     message: error.message,
                     stack: error.stack
