@@ -35,11 +35,12 @@ app.use((ctx, next) => new Promise(async (resolve, reject) => {
             message: 'Fail to load Controller'
         });
     }
-    var controller = invoke['controller'];
-    var method = invoke['method'];
-    var method_params = [];
+    let controller = invoke['controller'];
+    let method = invoke['method'];
+    let method_params = [];
+    let controller_methods = Object.keys(controller);
 
-    var this_params = {
+    let this_params = {
         ctx: ctx,
         next: next,
         ext: loaded_extension,
@@ -49,7 +50,7 @@ app.use((ctx, next) => new Promise(async (resolve, reject) => {
 
     ctx.query = Object.assign(ctx.query, ctx.request.body);
 
-    if (!Reflect.has(controller, method)) {
+    if (!Reflect.has(controller, method) || controller_methods.indexOf(method) === -1) {
         return reject({
             status: 404,
             message: 'Method Not Found',
@@ -57,9 +58,9 @@ app.use((ctx, next) => new Promise(async (resolve, reject) => {
         })
     }
     if (config.auto_params) {
-        var _method_params = router.getParams(controller[method]);
-        var method_keys = Object.keys(_method_params);
-        var request_keys = Object.keys(ctx.query);
+        let _method_params = router.getParams(controller[method]);
+        let method_keys = Object.keys(_method_params);
+        let request_keys = Object.keys(ctx.query);
 
         method_keys.forEach((value, index) => {
             if (request_keys.indexOf(value) >= 0) {
@@ -81,7 +82,7 @@ app.use((ctx, next) => new Promise(async (resolve, reject) => {
         });
     }
 
-    var reflect = Reflect.apply(controller[method], this_params, method_params).then(res => {
+    let reflect = Reflect.apply(controller[method], this_params, method_params).then(res => {
         return resolve(res);
     }).catch(err => {
         return reject(err);
@@ -101,7 +102,7 @@ app.use((ctx, next) => new Promise(async (resolve, reject) => {
         status: (err.status !== undefined) ? err.status : 500,
         message: err.message,
     }
-    let keys = ['stack', 'method', 'path'];
+    let keys = ['stack', 'method', 'path', 'error'];
     keys.map(key => {
         if (err[key] !== undefined) {
             error_body[key] = err[key]
