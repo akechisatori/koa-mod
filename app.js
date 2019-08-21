@@ -50,6 +50,16 @@ app.use((ctx, next) => new Promise(async (resolve, reject) => {
 
     Object.keys(ctx.request.body).map(key => {
         ctx.query[key] = ctx.request.body[key];
+        ctx.query[key].__proto__.isGET = false;
+        ctx.query[key].__proto__.isPOST = false;
+    })
+
+    Object.keys(ctx.query).map(query => {
+        if (ctx.request.body[query]) {
+            ctx.query[query].__proto__.isPOST = true;
+        } else {
+            ctx.query[query].__proto__.isGET = true;
+        }
     })
 
     if (!Reflect.has(controller, method) || controller_methods.indexOf(method) === -1) {
