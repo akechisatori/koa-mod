@@ -48,7 +48,9 @@ app.use((ctx, next) => new Promise(async (resolve, reject) => {
         mysql: sequelize
     }
 
-    ctx.query = Object.assign(ctx.query, ctx.request.body);
+    Object.keys(ctx.request.body).map(key => {
+        ctx.query[key] = ctx.request.body[key];
+    })
 
     if (!Reflect.has(controller, method) || controller_methods.indexOf(method) === -1) {
         return reject({
