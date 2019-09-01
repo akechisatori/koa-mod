@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config();
 const Koa = require('koa');
 const config = require('./config');
 const router = require('./router');
@@ -10,12 +11,10 @@ if (config.mysql) {
     model = require('./database/loader');
 }
 const bodyParser = require('koa-bodyparser');
-const dotenv = require('dotenv');
 
 const app = new Koa();
 const loaded_extension = loader.load();
 
-dotenv.config();
 app.use(bodyParser());
 app.use((ctx, next) => {
     const start = new Date();
