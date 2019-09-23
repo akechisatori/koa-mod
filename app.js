@@ -44,7 +44,8 @@ app.use((ctx, next) => new Promise(async (resolve, reject) => {
         next: next,
         ext: loaded_extension,
         db: model,
-        mysql: sequelize
+        mysql: sequelize,
+        ...controller
     }
 
     Object.keys(ctx.request.body).map(key => {
