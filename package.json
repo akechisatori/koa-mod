@@ -23,7 +23,7 @@
         "koa": "^2.7.0",
         "koa-bodyparser": "^2.5.0",
         "koa-onerror": "^4.1.0",
-        "lodash": ">=4.17.13",
+        "lodash": ">=4.17.19",
         "koa-route": "^3.2.0",
         "mariadb": "^2.0.3",
         "mysql2": "^1.6.5",
